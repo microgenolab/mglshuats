@@ -1350,3 +1350,46 @@ footer {
     <div class="footer-copy">© 2026 Microbial Genomics Lab, SHUATS, Prayagraj. All rights reserved.</div>
   </div>
 </footer>
+
+  <script>
+    (function(){
+      var slides = document.querySelectorAll('#slideshow .slide');
+      var dotsWrap = document.getElementById('slide-dots');
+      var counter = document.getElementById('slide-counter');
+      var current = 0;
+      var total = slides.length;
+
+      if(total === 0) return;
+
+      // ensure first slide is active
+      for(var k=0;k<total;k++) slides[k].classList.remove('active');
+      slides[0].classList.add('active');
+
+      // Build dots
+      for(var i = 0; i < total; i++){
+        var d = document.createElement('div');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        (function(idx){
+          d.onclick = function(){ goTo(idx); };
+        })(i);
+        dotsWrap.appendChild(d);
+      }
+      counter.textContent = '1 / ' + total;
+
+      function goTo(n){
+        slides[current].classList.remove('active');
+        dotsWrap.children[current].classList.remove('active');
+        current = (n + total) % total;
+        slides[current].classList.add('active');
+        dotsWrap.children[current].classList.add('active');
+        counter.textContent = (current + 1) + ' / ' + total;
+      }
+
+      window.changeSlide = function(dir){ goTo(current + dir); };
+
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'ArrowLeft') goTo(current - 1);
+        if(e.key === 'ArrowRight') goTo(current + 1);
+      });
+    })();
+  </script>
